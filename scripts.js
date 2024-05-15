@@ -45,9 +45,9 @@ function grayscaleFilter(){
 }
 
 function applyRGBFilter(color){
-  // let grayImage = makeGray();
-  let newImage = new SimpleImage(originalImage);
-  for (let pixel of newImage.values()){
+  let grayImage = makeGray();
+  let newImage = new SimpleImage(grayImage);
+  for (let pixel of grayImage.values()){
     let x = pixel.getX();
     let y = pixel.getY();
     switch (color){
@@ -84,10 +84,16 @@ function makeGray() {
 }
 
 function imageIsLoaded(anImage){
+  console.log(anImage);
   if (anImage != null) return true;
   return false;  
 }
 
 function resetCanvas(){
+  if (imageIsLoaded(originalImage) == false){
+    alert('No image is loaded.\n\tTry loading a new image.');
+    return;
+  }
   originalImage.drawTo(canvas1);
+  filteredImage = null;
 }
