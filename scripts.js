@@ -12,86 +12,82 @@ function loadImage(){
   filteredImage = null;
 }
 function redFilter(){
+  if (imageIsLoaded(originalImage) == false){
+    alert('No image is loaded for filtering.\n\tTry loading a new image.');
+    return;
+  }
   filteredImage = applyRGBFilter("red");
   filteredImage.drawTo(canvas1);
 }
+function greenFilter(){
+  if (imageIsLoaded(originalImage) == false){
+    alert('No image is loaded for filtering.\n\tTry loading a new image.');
+    return;
+  }
+  filteredImage = applyRGBFilter("green");
+  filteredImage.drawTo(canvas1);  
+}
 function blueFilter(){
-  
+  if (imageIsLoaded(originalImage) == false){
+    alert('No image is loaded for filtering.\n\tTry loading a new image.');
+    return;
+  }
+  filteredImage = applyRGBFilter("blue");
+  filteredImage.drawTo(canvas1);  
+}
+function grayscaleFilter(){
+  if (imageIsLoaded(originalImage) == false){
+    alert('No image is loaded for filtering.\n\tTry loading a new image.');
+    return;
+  }
+  filteredImage = makeGray();
+  filteredImage.drawTo(canvas1);  
 }
 
 function applyRGBFilter(color){
-  let newImage = new SimpleImage(originalImage.width, originalImage.height);
-  for (let pixel of originalImage.values()){
+  // let grayImage = makeGray();
+  let newImage = new SimpleImage(originalImage);
+  for (let pixel of newImage.values()){
     let x = pixel.getX();
     let y = pixel.getY();
     switch (color){
       case 'red':
         pixel.setRed(255);
+        break;
       case 'blue':
-        pixel.setGreen(255);
-      case 'red':
         pixel.setBlue(255);
+        break;
+      case 'green':
+        pixel.setGreen(255);
+        break;
+      default:
+        console.error("Something went wrong with applyRGBImage function. \n\t\'color\' value: " + color)
     }
     newImage.setPixel(x,y,pixel);
   }
   return newImage;
 }
 
-function blurFilter(){
-  
+function makeGray() {
+  let newImage = new SimpleImage(originalImage);
+  // for loop over image pixels, get rgb average, set each RGB value to the average value.
+  let avg = 0;
+  for (let pix of newImage.values()){
+    avg = (pix.getRed() + pix.getGreen() + pix.getBlue())/3;
+    pix.setRed(avg);
+    pix.setGreen(avg);
+    pix.setBlue(avg);
+  }
+  // let canvas1 = document.getElementById("canvas1");
+  // grayScale1.drawTo(canvas2);
+  return newImage;
 }
 
-function doGreenScreen(){
-  if (foregroundImage == null) {
-    alert("Foreground Image is NOT loaded.\n\tUpload a Foreground Image");
-    return;
-  }
-  // if (backgroundImage == null || backgroundImage != backgroundImage.complete()) {
-  if (backgroundImage == null ) {
-    alert("Background Image is NOT loaded.\n\tUpload a Background Image");
-    return;
-  }
-  if (!imageSizesAreSame()) {
-    alert("The Background Image and Foreground Image are not the same size. \n\t Upload images of the same size."
-    + "\n\nBackground Image size: " + backgroundImage.getWidth() + " x " + backgroundImage.getHeight()
-    + "\nForeground size: " + foregroundImage.getWidth() + " x " + foregroundImage.getHeight());
-    return;
-  }
-  backgroundImage = createComposite();
-  backgroundImage.drawTo(canvas2);
-  
+function imageIsLoaded(anImage){
+  if (anImage != null) return true;
+  return false;  
 }
 
-function createComposite() {
-  let compositeImage = new SimpleImage(foregroundImage.getWidth(), foregroundImage.getHeight());
-  for (let pixel of foregroundImage.values()){
-    let x = pixel.getX();
-    let y = pixel.getY();
-    if (pixel.getGreen() > pixel.getRed() + pixel.getBlue()){
-      let backgroundPixel = backgroundImage.getPixel(x, y);
-      compositeImage.setPixel(x,y, backgroundPixel);
-    } else {
-      compositeImage.setPixel(x,y, foregroundImage.getPixel(x,y));
-    }
-  }
-  return compositeImage;
-}
-function clearCanvas(){
-  let id1 = "canvas1";
-  let id2 = "canvas2";
-  clearCanvasById(id1);
-  clearCanvasById(id2);
-  foregroundImage = null;
-  backgroundImage = null;
-}
-
-function clearCanvasById(canvasId){
-  let canvas = document.getElementById(canvasId);
-  let context = canvas.getContext("2d");
-  context.clearRect(0,0, canvas.clientWidth,canvas.height);
-}
-
-function imageSizesAreSame() {
-  if (backgroundImage.width != foregroundImage.width || backgroundImage.height != foregroundImage.height) return false;
-  return true;
+function resetCanvas(){
+  originalImage.drawTo(canvas1);
 }
