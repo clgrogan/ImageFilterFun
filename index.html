@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DLTP Image Filter Fun</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <script src="scripts.js"></script>
+    <script src="https://simpleimagejs.netlify.app/simpleimage.js"></script>
+    <script src="https://simpleimagejs.netlify.app/simplepixel.js"></script>
+    <section>
+      <h1>Image Filter Fune</h1>
+      <h2>Programming Foundations with JavaScript, HTML and CSS assignment</h2>
+      <h3>Duke University</h3>
+    </section>
+    <section>
+      <canvas id="canvas1"></canvas>
+      <!-- <canvas id="canvas2"></canvas> -->
+    </section>
+    <section>
+      <label>Choose Image to Filter</label>
+      <input
+        type="file"
+        id="file1"
+        multiple="false"
+        accept="image/*"
+        onchange="loadImage()"
+      />
+    </section>
+    <section>
+      <input type="button" value="Red" onclick="redFilter()" />
+      <input type="button" value="Blue" onclick="blueFilter()" />
+      <input type="button" value="Blur" onclick="blurFilter()" />
+      <input type="button" value="Clear Canvases" onclick="clearCanvas()" />
+    </section>
+  </body>
+</html>
